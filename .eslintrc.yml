@@ -7,4 +7,4 @@ env:
   browser: true
 
 extends: 'htmlacademy/vanilla'
-parcer: '@babel/eslint-parcer'
+parser: '@babel/eslint-parcer'
