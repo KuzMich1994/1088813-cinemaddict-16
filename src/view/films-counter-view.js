@@ -1,5 +1,5 @@
-export const createFilmsCounterTemplate = () => (
+export const createFilmsCounterTemplate = (getAllFilms) => (
   `
-    <p>130 291 movies inside</p>
+    <p>${getAllFilms.length} movies inside</p>
   `
 );
