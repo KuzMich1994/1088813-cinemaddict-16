@@ -10,7 +10,7 @@ const createFilterItemsTemplate = (filter) => {
 };
 
 export const createMainNavigationTemplate = (filters) => {
-  const filtersItemsTemplate = filters
+  const filterItemsTemplate = filters
     .map((filter) => createFilterItemsTemplate(filter))
     .join('');
 
@@ -18,7 +18,7 @@ export const createMainNavigationTemplate = (filters) => {
     `<nav class="main-navigation">
       <div class="main-navigation__items">
       <a href="#all" class="main-navigation__item">All movies</a>
-        ${filtersItemsTemplate}
+        ${filterItemsTemplate}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`

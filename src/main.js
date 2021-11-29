@@ -25,11 +25,11 @@ const getAllFilms = () => {
   return filmsList;
 };
 
-const FILMS = getAllFilms();
+const filmsFixture = getAllFilms();
 
 
 renderTemplate(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(main, createMainNavigationTemplate(generateFilter(FILMS)), RenderPosition.BEFOREEND);
+renderTemplate(main, createMainNavigationTemplate(generateFilter(filmsFixture)), RenderPosition.BEFOREEND);
 renderTemplate(main, createSortTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(main, createFilmsTemplate(), RenderPosition.BEFOREEND);
 
@@ -39,8 +39,8 @@ renderTemplate(films, createFilmsListTemplate(), RenderPosition.BEFOREEND);
 
 const filmsListContainer = document.querySelector('.films-list__container');
 
-for (let i = 0; i < Math.min(FILMS.length, FILMS_COUNTER_PER_STEP); i++) {
-  renderTemplate(filmsListContainer, createFilmCardTemplate(FILMS[i]), RenderPosition.BEFOREEND);
+for (let i = 0; i < Math.min(filmsFixture.length, FILMS_COUNTER_PER_STEP); i++) {
+  renderTemplate(filmsListContainer, createFilmCardTemplate(filmsFixture[i]), RenderPosition.BEFOREEND);
 }
 
 const showFilmInfo = () => {
@@ -53,7 +53,7 @@ const showFilmInfo = () => {
         return;
       }
 
-      renderTemplate(footer, createFilmDetailsTemplate(FILMS[index]), RenderPosition.AFTEREND);
+      renderTemplate(footer, createFilmDetailsTemplate(filmsFixture[index]), RenderPosition.AFTEREND);
 
       const closePopupButton = document.querySelector('.film-details__close-btn');
       const infoPopup = document.querySelector('.film-details');
@@ -69,7 +69,7 @@ const showFilmInfo = () => {
   });
 };
 
-if (FILMS.length > FILMS_COUNTER_PER_STEP) {
+if (filmsFixture.length > FILMS_COUNTER_PER_STEP) {
   let renderFilmCount = FILMS_COUNTER_PER_STEP;
   renderTemplate(filmsListContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
 
@@ -77,18 +77,18 @@ if (FILMS.length > FILMS_COUNTER_PER_STEP) {
 
   showMoreButton.addEventListener('click', (e) => {
     e.preventDefault();
-    FILMS
+    filmsFixture
       .slice(renderFilmCount, renderFilmCount + FILMS_COUNTER_PER_STEP)
       .forEach((film) => renderTemplate(filmsListContainer, createFilmCardTemplate(film), RenderPosition.BEFOREEND));
     renderFilmCount += FILMS_COUNTER_PER_STEP;
 
-    if (renderFilmCount >= FILMS.length) {
+    if (renderFilmCount >= filmsFixture.length) {
       showMoreButton.remove();
     }
 
     showFilmInfo();
   });
 }
-renderTemplate(footerStatistics, createFilmsCounterTemplate(FILMS), RenderPosition.BEFOREEND);
+renderTemplate(footerStatistics, createFilmsCounterTemplate(filmsFixture), RenderPosition.BEFOREEND);
 
 showFilmInfo();
