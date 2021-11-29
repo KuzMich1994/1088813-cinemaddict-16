@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getTimeFromMins } from '../utils';
+import { addElipsis, getRandomInteger, getTimeFromMins } from '../utils';
 
 const createFilmCardControlsTemplate = (isAlreadyWatched, isFavorite, isWatchList) => (`<div class="film-card__controls">
       <button class="film-card__controls-item ${isWatchList ? 'film-card__controls-item--active' : ''} film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
@@ -14,15 +14,15 @@ export const createFilmCardTemplate = (film) => {
 
   return (`<article class="film-card">
     <a class="film-card__link">
-      <h3 class="film-card__title">${name && name}</h3>
-      <p class="film-card__rating">${rating && rating}</p>
+      <h3 class="film-card__title">${name ? name : ''}</h3>
+      <p class="film-card__rating">${rating ? rating : ''}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${year && year}</span>
-        <span class="film-card__duration">${getTimeFromMins(runtime && runtime)}</span>
+        <span class="film-card__year">${year ? year : ''}</span>
+        <span class="film-card__duration">${runtime ? getTimeFromMins(runtime) : ''}</span>
         <span class="film-card__genre">${genre[getRandomInteger(0, genre.length - 1)]}</span>
       </p>
-      <img src="/images/posters/${poster && poster}" alt="${name && name}" class="film-card__poster">
-      <p class="film-card__description">${description && description}</p>
+      <img src="./images/posters/${poster ? poster : ''}" alt="${name ? name : ''}" class="film-card__poster">
+      <p class="film-card__description">${addElipsis(description, 140)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
     ${controlsTemplate}

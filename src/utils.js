@@ -1,4 +1,4 @@
-import { generateComment } from "./mock/comments";
+import { generateComment } from './mock/comments';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -39,4 +39,14 @@ export const generateRandomComments = () => {
   }
 
   return newComments;
+};
+
+export const addElipsis = (textContent, counter) => {
+  let filteredTextContent = textContent ? textContent : '';
+
+  if (filteredTextContent.length > counter) {
+    filteredTextContent = `${filteredTextContent.substring(0, counter)  }...`;
+  }
+
+  return filteredTextContent;
 };

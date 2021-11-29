@@ -1,4 +1,4 @@
-import { releases, descriptions, names, posters, genre, directors, actors, runtimes } from '../const';
+import { releases, descriptions, names, posters, genre, directors, actors, runtimes } from './data';
 import { getRandomInteger, getRandomNumber, generateContent, generateRandomComments } from '../utils';
 
 

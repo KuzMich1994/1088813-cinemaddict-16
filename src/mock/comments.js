@@ -1,4 +1,4 @@
-import { authors, commentContent, datesOfComment, smiles } from '../const';
+import { authors, commentContent, datesOfComment, smiles } from './data';
 import { generateContent } from '../utils';
 
 export const generateComment = () => ({

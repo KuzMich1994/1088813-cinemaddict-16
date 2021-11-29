@@ -1,5 +1,5 @@
 
-const filmToFilterMap = {
+const transfprmFilmToFilterMap = {
   watchlist: (films) => films
     .filter((film) => film.isWatchList).length,
   history: (films) => films
@@ -8,7 +8,7 @@ const filmToFilterMap = {
     .filter((film) => film.isFavorite).length,
 };
 
-export const generateFilter = (films) => Object.entries(filmToFilterMap).map(
+export const generateFilter = (films) => Object.entries(transfprmFilmToFilterMap).map(
   ([filterName, countFilms]) => ({
     name: filterName,
     count: countFilms(films),

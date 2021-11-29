@@ -59,27 +59,27 @@ export const createFilmDetailsTemplate = (film) => {
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${name && name}</h3>
-                  <p class="film-details__title-original">Original: ${name && name}</p>
+                  <h3 class="film-details__title">${name ? name : ''}</h3>
+                  <p class="film-details__title-original">Original: ${name ? name : ''}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${rating && rating}</p>
+                  <p class="film-details__total-rating">${rating ? rating : ''}</p>
                 </div>
               </div>
 
               <table class="film-details__table">
                 <tr class="film-details__row">
                   <td class="film-details__term">Director</td>
-                  <td class="film-details__cell">${director && director}</td>
+                  <td class="film-details__cell">${director ? director : ''}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${writers && writers.join(', ')}</td>
+                  <td class="film-details__cell">${writers ? writers.join(', ') : ''}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${actor && actor.join(', ')}</td>
+                  <td class="film-details__cell">${actor ? actor.join(', ') : ''}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -87,7 +87,7 @@ export const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${runtime && getTimeFromMins(runtime)}</td>
+                  <td class="film-details__cell">${runtime ? getTimeFromMins(runtime) : ''}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
@@ -102,7 +102,7 @@ export const createFilmDetailsTemplate = (film) => {
               </table>
 
               <p class="film-details__film-description">
-                ${description}
+                ${description ? description : ''}
               </p>
             </div>
           </div>
