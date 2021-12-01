@@ -32,8 +32,8 @@ const filters = generateFilter(filmsFixture);
 
 
 const filmsComponent = new FilmsView();
-const filmsListComponent = new FilmsListView();
-const filmsListContainerComponent = new FilmsListContainerView();
+const filmListComponent = new FilmsListView();
+const filmListContainerComponent = new FilmsListContainerView();
 
 const renderFilm = (containerElement, film) => {
   const filmComponent = new FilmCardView(film);
@@ -55,16 +55,16 @@ render(header, new HeaderProfileView().element, RenderPosition.BEFOREEND);
 render(main, new MainNavigationView(filters).element, RenderPosition.BEFOREEND);
 render(main, new SortView().element, RenderPosition.BEFOREEND);
 render(main, filmsComponent.element, RenderPosition.BEFOREEND);
-render(filmsComponent.element, filmsListComponent.element, RenderPosition.BEFOREEND);
-render(filmsListComponent.element, filmsListContainerComponent.element, RenderPosition.BEFOREEND);
+render(filmsComponent.element, filmListComponent.element, RenderPosition.BEFOREEND);
+render(filmListComponent.element, filmListContainerComponent.element, RenderPosition.BEFOREEND);
 
 for (let i = 0; i < Math.min(filmsFixture.length, FILMS_COUNTER_PER_STEP); i++) {
-  renderFilm(filmsListContainerComponent.element, filmsFixture[i]);
+  renderFilm(filmListContainerComponent.element, filmsFixture[i]);
 }
 
 if (filmsFixture.length > FILMS_COUNTER_PER_STEP) {
   let renderFilmCount = FILMS_COUNTER_PER_STEP;
-  render(filmsListContainerComponent.element, new ShowMoreView().element, RenderPosition.AFTEREND);
+  render(filmListContainerComponent.element, new ShowMoreView().element, RenderPosition.AFTEREND);
 
   const showMoreButton = document.querySelector('.films-list__show-more');
 
@@ -72,7 +72,7 @@ if (filmsFixture.length > FILMS_COUNTER_PER_STEP) {
     e.preventDefault();
     filmsFixture
       .slice(renderFilmCount, renderFilmCount + FILMS_COUNTER_PER_STEP)
-      .forEach((film) => renderFilm(filmsListContainerComponent.element, film));
+      .forEach((film) => renderFilm(filmListContainerComponent.element, film));
     renderFilmCount += FILMS_COUNTER_PER_STEP;
 
     if (renderFilmCount >= filmsFixture.length) {

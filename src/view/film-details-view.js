@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { getTimeFromMins, createElement } from '../utils';
 
-const createCommentTemplate = (generateComments, comments) => {
+const createCommentTemplate = (generateComment, comments) => {
   const newComment = comments.map(() => {
-    const { author, date, emotion, commentMessage } = generateComments();
+    const { author, date, emotion, commentMessage } = generateComment();
     const fullDate = dayjs(date).format('YYYY/MM/D H:mm');
 
     return (`
@@ -159,11 +159,11 @@ const createFilmDetailsTemplate = (film, generateComment) => {
 export default class FilmDetailsView {
   #element = null;
   #film = null;
-  #generateComentFunction = null;
+  #generateCommentFunction = null;
 
-  constructor(film, generateComentFunction) {
+  constructor(film, generateCommentFunction) {
     this.#film = film;
-    this.#generateComentFunction = generateComentFunction;
+    this.#generateCommentFunction = generateCommentFunction;
   }
 
   get element() {
@@ -175,7 +175,7 @@ export default class FilmDetailsView {
   }
 
   get template() {
-    return createFilmDetailsTemplate(this.#film, this.#generateComentFunction);
+    return createFilmDetailsTemplate(this.#film, this.#generateCommentFunction);
   }
 
   removeElement() {
