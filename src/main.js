@@ -1,16 +1,18 @@
-import { createFilmCardTemplate } from './view/film-card-view';
-import { createFilmsListTemplate } from './view/films-list-view';
-import { createFilmsTemplate } from './view/films-view';
-import { createHeaderProfileTemplate } from './view/header-profile-view';
-import { createMainNavigationTemplate } from './view/navigation-view';
-import { createSortTemplate } from './view/sort-view';
-import { renderTemplate, RenderPosition } from './render';
-import { createShowMoreButtonTemplate } from './view/show-more-button-view';
-import { createFilmsCounterTemplate } from './view/films-counter-view';
-import { createFilmDetailsTemplate } from './view/film-details-view';
+import FilmCardView from './view/film-card-view';
+import FilmsListView from './view/films-list-view';
+import FilmsView from './view/films-view';
+import HeaderProfileView from './view/header-profile-view';
+import MainNavigationView from './view/navigation-view';
+import SortView from './view/sort-view';
+import { RenderPosition, render } from './render';
+import ShowMoreView from './view/show-more-button-view';
+import FilmsCounterView from './view/films-counter-view';
+import FilmDetailsView from './view/film-details-view';
 import { generateFilm } from './mock/film';
 import { generateFilter } from './mock/filter';
 import { FILMS_LIST_COUNTER, FILMS_COUNTER_PER_STEP } from './const';
+import FilmsListContainerView from './view/films-list-container';
+import { generateComment } from './mock/comments';
 
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
@@ -26,52 +28,43 @@ const getAllFilms = () => {
 };
 
 const filmsFixture = getAllFilms();
+const filters = generateFilter(filmsFixture);
 
 
-renderTemplate(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(main, createMainNavigationTemplate(generateFilter(filmsFixture)), RenderPosition.BEFOREEND);
-renderTemplate(main, createSortTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(main, createFilmsTemplate(), RenderPosition.BEFOREEND);
+const filmsComponent = new FilmsView();
+const filmListComponent = new FilmsListView();
+const filmListContainerComponent = new FilmsListContainerView();
 
-const films = document.querySelector('.films');
+const renderFilm = (containerElement, film) => {
+  const filmComponent = new FilmCardView(film);
+  const filmDetailsComponent = new FilmDetailsView(film, generateComment);
 
-renderTemplate(films, createFilmsListTemplate(), RenderPosition.BEFOREEND);
+  filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+    render(footer, filmDetailsComponent.element, RenderPosition.AFTEREND);
+    document.body.classList.add('hide-overflow');
+  });
 
-const filmsListContainer = document.querySelector('.films-list__container');
+  filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+    filmDetailsComponent.element.remove();
+    document.body.classList.remove('hide-overflow');
+  });
+  render(containerElement, filmComponent.element, RenderPosition.BEFOREEND);
+};
+
+render(header, new HeaderProfileView().element, RenderPosition.BEFOREEND);
+render(main, new MainNavigationView(filters).element, RenderPosition.BEFOREEND);
+render(main, new SortView().element, RenderPosition.BEFOREEND);
+render(main, filmsComponent.element, RenderPosition.BEFOREEND);
+render(filmsComponent.element, filmListComponent.element, RenderPosition.BEFOREEND);
+render(filmListComponent.element, filmListContainerComponent.element, RenderPosition.BEFOREEND);
 
 for (let i = 0; i < Math.min(filmsFixture.length, FILMS_COUNTER_PER_STEP); i++) {
-  renderTemplate(filmsListContainer, createFilmCardTemplate(filmsFixture[i]), RenderPosition.BEFOREEND);
+  renderFilm(filmListContainerComponent.element, filmsFixture[i]);
 }
-
-const showFilmInfo = () => {
-  const filmCards = document.querySelectorAll('.film-card');
-  filmCards.forEach((filmCard, index) => {
-    const handleOpen = (e) => {
-      const target = e.target;
-
-      if (target.closest('.film-card__controls') || target.closest('.film-card__comments')) {
-        return;
-      }
-
-      renderTemplate(footer, createFilmDetailsTemplate(filmsFixture[index]), RenderPosition.AFTEREND);
-
-      const closePopupButton = document.querySelector('.film-details__close-btn');
-      const infoPopup = document.querySelector('.film-details');
-      const handleClose = () => {
-        infoPopup.remove();
-        closePopupButton.removeEventListener('click', handleClose);
-      };
-
-      closePopupButton.addEventListener('click', handleClose);
-    };
-
-    filmCard.onclick = handleOpen;
-  });
-};
 
 if (filmsFixture.length > FILMS_COUNTER_PER_STEP) {
   let renderFilmCount = FILMS_COUNTER_PER_STEP;
-  renderTemplate(filmsListContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
+  render(filmListContainerComponent.element, new ShowMoreView().element, RenderPosition.AFTEREND);
 
   const showMoreButton = document.querySelector('.films-list__show-more');
 
@@ -79,16 +72,13 @@ if (filmsFixture.length > FILMS_COUNTER_PER_STEP) {
     e.preventDefault();
     filmsFixture
       .slice(renderFilmCount, renderFilmCount + FILMS_COUNTER_PER_STEP)
-      .forEach((film) => renderTemplate(filmsListContainer, createFilmCardTemplate(film), RenderPosition.BEFOREEND));
+      .forEach((film) => renderFilm(filmListContainerComponent.element, film));
     renderFilmCount += FILMS_COUNTER_PER_STEP;
 
     if (renderFilmCount >= filmsFixture.length) {
       showMoreButton.remove();
     }
 
-    showFilmInfo();
   });
 }
-renderTemplate(footerStatistics, createFilmsCounterTemplate(filmsFixture), RenderPosition.BEFOREEND);
-
-showFilmInfo();
+render(footerStatistics, new FilmsCounterView(filmsFixture).element, RenderPosition.BEFOREEND);

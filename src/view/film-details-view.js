@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
-import { generateComment } from '../mock/comments';
-import { getTimeFromMins } from '../utils';
+import { getTimeFromMins, createElement } from '../utils';
 
-const createCommentTemplate = (generateComments, comments) => {
+const createCommentTemplate = (generateComment, comments) => {
   const newComment = comments.map(() => {
-    const { author, date, emotion, commentMessage } = generateComments();
+    const { author, date, emotion, commentMessage } = generateComment();
     const fullDate = dayjs(date).format('YYYY/MM/D H:mm');
 
     return (`
@@ -38,12 +37,12 @@ const createFilmDetailsControlButton = (film) => {
 };
 
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film, generateComment) => {
   const { name, description, poster, rating, release, director, actor, writers, runtime, genre, comments } = film;
   const fullDate = dayjs(release.date).format('D MMMM YYYY');
 
-  return (`
-    <section class="film-details">
+  return (
+    `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="film-details__top-container">
           <div class="film-details__close">
@@ -152,7 +151,34 @@ export const createFilmDetailsTemplate = (film) => {
           </section>
         </div>
       </form>
-    </section>
-  `
+    </section>`
   );
 };
+
+
+export default class FilmDetailsView {
+  #element = null;
+  #film = null;
+  #generateCommentFunction = null;
+
+  constructor(film, generateCommentFunction) {
+    this.#film = film;
+    this.#generateCommentFunction = generateCommentFunction;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmDetailsTemplate(this.#film, this.#generateCommentFunction);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
