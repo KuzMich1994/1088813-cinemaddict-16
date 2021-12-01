@@ -1,10 +1,10 @@
 import { createElement } from '../utils';
 
-const createShowMoreButtonTemplate = () => (
-  '<button class="films-list__show-more">Show more</button>'
+const createFilmsListContainerTemplate = () => (
+  '<div class="films-list__container"></div>'
 );
 
-export default class ShowMoreView {
+export default class FilmsListContainerView {
   #element = null;
 
   get element() {
@@ -16,7 +16,7 @@ export default class ShowMoreView {
   }
 
   get template() {
-    return createShowMoreButtonTemplate();
+    return createFilmsListContainerTemplate();
   }
 
   removeElement() {
