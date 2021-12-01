@@ -1,9 +1,7 @@
 import { createElement } from '../utils';
 
 const createFilmsListTemplate = (extraClass) => (
-  `<section class="films-list ${extraClass ? extraClass : ''}">
-      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-    </section>`
+  `<section class="films-list ${extraClass ? extraClass : ''}"></section>`
 );
 
 export default class FilmsListView {
