@@ -13,6 +13,7 @@ import { generateFilter } from './mock/filter';
 import { FILMS_LIST_COUNTER, FILMS_COUNTER_PER_STEP } from './const';
 import FilmsListContainerView from './view/films-list-container';
 import { generateComment } from './mock/comments';
+import FilmsListTileView from './view/films-list-title-view';
 
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
@@ -39,15 +40,27 @@ const renderFilm = (containerElement, film) => {
   const filmComponent = new FilmCardView(film);
   const filmDetailsComponent = new FilmDetailsView(film, generateComment);
 
+  const onEscKeyDown = (e) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      filmDetailsComponent.element.remove();
+      document.body.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
     render(footer, filmDetailsComponent.element, RenderPosition.AFTEREND);
     document.body.classList.add('hide-overflow');
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
     filmDetailsComponent.element.remove();
     document.body.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', onEscKeyDown);
   });
+
+
   render(containerElement, filmComponent.element, RenderPosition.BEFOREEND);
 };
 
@@ -57,6 +70,12 @@ render(main, new SortView().element, RenderPosition.BEFOREEND);
 render(main, filmsComponent.element, RenderPosition.BEFOREEND);
 render(filmsComponent.element, filmListComponent.element, RenderPosition.BEFOREEND);
 render(filmListComponent.element, filmListContainerComponent.element, RenderPosition.BEFOREEND);
+
+if (filmsFixture.length === 0) {
+  render(filmListComponent.element, new FilmsListTileView('There are no movies in our database').element, RenderPosition.AFTERBEGIN);
+} else {
+  render(filmListComponent.element, new FilmsListTileView('All movies. Upcoming', 'visually-hidden').element, RenderPosition.AFTERBEGIN);
+}
 
 for (let i = 0; i < Math.min(filmsFixture.length, FILMS_COUNTER_PER_STEP); i++) {
   renderFilm(filmListContainerComponent.element, filmsFixture[i]);
