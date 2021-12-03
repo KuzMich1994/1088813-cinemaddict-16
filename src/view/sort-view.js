@@ -1,4 +1,4 @@
-import { createElement } from '../utils';
+import ComponentView from './component-view';
 
 const createSortTemplate = () => (
   `<ul class="sort">
@@ -8,23 +8,8 @@ const createSortTemplate = () => (
   </ul>`
 );
 
-export default class SortView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class SortView extends ComponentView {
   get template() {
     return createSortTemplate();
   }
-
-  removeElement() {
-    this.#element = null;
-  }
-
 }

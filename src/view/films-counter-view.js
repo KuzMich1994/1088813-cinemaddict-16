@@ -1,29 +1,17 @@
-import { createElement } from '../utils';
+import ComponentView from './component-view';
 
 const createFilmsCounterTemplate = (getAllFilms) => (
   `<p>${getAllFilms.length} movies inside</p>`
 );
 
-export default class FilmsCounterView {
-  #element = null;
+export default class FilmsCounterView extends ComponentView {
   #counter = null;
   constructor(counter) {
+    super();
     this.#counter = counter;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createFilmsCounterTemplate(this.#counter);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

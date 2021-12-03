@@ -1,25 +1,21 @@
-import { createElement } from '../utils';
+import ComponentView from './component-view';
 
 const createShowMoreButtonTemplate = () => (
   '<button class="films-list__show-more">Show more</button>'
 );
 
-export default class ShowMoreView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class ShowMoreView extends ComponentView {
   get template() {
     return createShowMoreButtonTemplate();
   }
 
-  removeElement() {
-    this.#element = null;
+  setAddCardsClickHandler = (callback) => {
+    this._callback.addCards = callback;
+    this.element.addEventListener('click', this.#addCardsClickHandler);
   }
+
+  #addCardsClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.addCards();
+  };
 }

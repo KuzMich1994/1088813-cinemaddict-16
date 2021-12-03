@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { addElipsis, getRandomInteger, getTimeFromMins, createElement } from '../utils';
+import { addElipsis, getRandomInteger, getTimeFromMins } from '../utils/common';
+import ComponentView from './component-view';
 
 const createFilmCardControlsTemplate = (isAlreadyWatched, isFavorite, isWatchList) => (`<div class="film-card__controls">
       <button class="film-card__controls-item ${isWatchList ? 'film-card__controls-item--active' : ''} film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
@@ -29,26 +30,24 @@ export const createFilmCardTemplate = (film) => {
   </article>`);
 };
 
-export default class FilmCardView {
-  #element;
+export default class FilmCardView extends ComponentView {
   #film;
   constructor(film) {
+    super();
     this.#film = film;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createFilmCardTemplate(this.#film);
   }
 
-  removeElement() {
-    this.#element = null;
+  setOpenPopupClickHandler = (callback) => {
+    this._callback.openPopup = callback;
+    this.element.querySelector('.film-card__link').addEventListener('click', this.#openPopupHandler);
+  }
+
+  #openPopupHandler = (e) => {
+    e.preventDefault();
+    this._callback.openPopup();
   }
 }

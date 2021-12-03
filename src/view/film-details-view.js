@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { getTimeFromMins, createElement } from '../utils';
+import { getTimeFromMins } from '../utils/common';
+import ComponentView from './component-view';
 
 const createCommentTemplate = (generateComment, comments) => {
   const newComment = comments.map(() => {
@@ -156,29 +157,27 @@ const createFilmDetailsTemplate = (film, generateComment) => {
 };
 
 
-export default class FilmDetailsView {
-  #element = null;
+export default class FilmDetailsView extends ComponentView {
   #film = null;
   #generateCommentFunction = null;
 
   constructor(film, generateCommentFunction) {
+    super();
     this.#film = film;
     this.#generateCommentFunction = generateCommentFunction;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createFilmDetailsTemplate(this.#film, this.#generateCommentFunction);
   }
 
-  removeElement() {
-    this.#element = null;
+  setClosePopupClickHandler = (callback) => {
+    this._callback.closePopup = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closePopupClickHandler);
+  }
+
+  #closePopupClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.closePopup();
   }
 }

@@ -1,5 +1,5 @@
 import { authors, commentContent, datesOfComment, smiles } from './data';
-import { generateContent } from '../utils';
+import { generateContent } from '../utils/film';
 
 export const generateComment = () => ({
   id: 1,
