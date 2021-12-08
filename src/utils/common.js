@@ -1,5 +1,3 @@
-import { generateComment } from './mock/comments';
-
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -25,21 +23,6 @@ export const getTimeFromMins = (mins) => {
   return `${hours}h ${minutes}m`;
 };
 
-export const generateContent = (contentArray) => {
-
-  const randomIndex = getRandomInteger(0, contentArray.length - 1);
-
-  return contentArray[randomIndex];
-};
-
-export const generateRandomComments = () => {
-  const newComments = [];
-  for (let i = 0; i < getRandomInteger(0, 5); i++) {
-    newComments.push(generateComment());
-  }
-
-  return newComments;
-};
 
 export const addElipsis = (textContent, counter) => {
   let filteredTextContent = textContent ? textContent : '';

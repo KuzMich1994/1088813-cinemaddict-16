@@ -1,4 +1,4 @@
-import { createElement } from '../utils';
+import ComponentView from './component-view';
 
 const createHeaderProfileTemplate = () => (
   `<section class="header__profile profile">
@@ -7,22 +7,8 @@ const createHeaderProfileTemplate = () => (
   </section>`
 );
 
-export default class HeaderProfileView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class HeaderProfileView extends ComponentView {
   get template() {
     return createHeaderProfileTemplate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

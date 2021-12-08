@@ -1,5 +1,6 @@
 import { releases, descriptions, names, posters, genre, directors, actors, runtimes } from './data';
-import { getRandomInteger, getRandomNumber, generateContent, generateRandomComments } from '../utils';
+import { getRandomInteger, getRandomNumber} from '../utils/common';
+import { generateContent, generateRandomComments } from './random-content';
 
 
 export const generateFilm = () => ({
