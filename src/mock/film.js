@@ -1,10 +1,11 @@
 import { releases, descriptions, names, posters, genre, directors, actors, runtimes } from './data';
 import { getRandomInteger, getRandomNumber} from '../utils/common';
 import { generateContent, generateRandomComments } from './random-content';
+import {nanoid} from 'nanoid';
 
 
 export const generateFilm = () => ({
-  id: getRandomInteger(0, 1000),
+  id: nanoid(),
   name: generateContent(names),
   description: generateContent(descriptions),
   poster: generateContent(posters),
