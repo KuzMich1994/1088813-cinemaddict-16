@@ -58,7 +58,7 @@ export default class FilmCardView extends ComponentView {
 
   setWatchlistClickHandler = (callback) => {
     this._callback.watchlistClick = callback;
-    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchlistClickHandler);
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchListClickHandler);
   }
 
   #favoriteClickHandler = (e) => {
@@ -71,7 +71,7 @@ export default class FilmCardView extends ComponentView {
     this._callback.alreadyWatchedClick();
   }
 
-  #watchlistClickHandler = (e) => {
+  #watchListClickHandler = (e) => {
     e.preventDefault();
     this._callback.watchlistClick();
   }

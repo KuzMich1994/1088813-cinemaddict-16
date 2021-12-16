@@ -5,13 +5,13 @@ import {remove, render, RenderPosition, replace} from '../utils/render';
 
 export default class FilmCardPresenter {
   #filmsListContainerComponent = null;
-  #changeData = null;
-
   #filmCardComponent = null;
   #filmDetailsComponent = null;
-  #footer = document.querySelector('footer');
-  #state = null;
 
+  #footer = document.querySelector('footer');
+
+  #changeData = null;
+  #state = null;
   #film = null;
 
   constructor(filmsListContainer, changeData, state) {
@@ -31,7 +31,7 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setOpenPopupClickHandler(this.#handleOpenPopup);
     this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
-    this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
+    this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
     this.#filmDetailsComponent.setClosePopupClickHandler(this.#handleClosePopup);
 
     if (prevFilmComponent === null) {
@@ -69,8 +69,8 @@ export default class FilmCardPresenter {
     this.#changeData({...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
   }
 
-  #handleWatchlistClick = () => {
-    this.#changeData({...this.#film, isWatchList: !this.#film.isFavorite});
+  #handleWatchListClick = () => {
+    this.#changeData({...this.#film, isWatchList: !this.#film.isWatchList});
   }
 
   #handleOpenPopup = () => {

@@ -5,26 +5,28 @@ import SortView from '../view/sort-view';
 import MainNavigationView from '../view/navigation-view';
 import FilmsView from '../view/films-view';
 import FilmsListView from '../view/films-list-view';
-import FilmsListTileView from '../view/films-list-title-view';
+import FilmsListTitleView from '../view/films-list-title-view';
 import FilmsListContainerView from '../view/films-list-container';
 import { generateFilter } from '../mock/filter';
 import FilmCardPresenter from './film-card-presenter';
 import {updateItem} from '../utils/common';
 import dayjs from 'dayjs';
 
-export default class  {
-  #mainContainer = null;
+export default class FilmsListPresenter {
   #filmsComponent = new FilmsView();
   #filmsListComponent = null;
   #filmsListContainerComponent = null;
   #showMoreButton = new ShowMoreView();
   #sortComponent = new SortView();
   #filtersComponent = null;
-  #renderFilmCount = FILMS_COUNTER_PER_STEP;
+
+  #mainContainer = null;
+
   #state = {
     isOpen: false,
   };
 
+  #renderFilmCount = FILMS_COUNTER_PER_STEP;
   #filmsData = [];
   #filmPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
@@ -47,14 +49,17 @@ export default class  {
 
   #sortFilms = (sortType) => {
     switch (sortType) {
-      case SortType.BY_DATE:
+      case SortType.BY_DATE: {
         this.#filmsData.sort((a, b) => dayjs(a.release.date).year() > dayjs(b.release.date).year() ? 1 : -1);
         break;
-      case SortType.BY_RATING:
+      }
+      case SortType.BY_RATING: {
         this.#filmsData.sort((a, b) => a.rating > b.rating ? 1 : -1);
         break;
-      default:
+      }
+      default: {
         this.#filmsData = [...this.#sourceFilmsData];
+      }
     }
     this.#currentSortType = sortType;
   }
@@ -128,7 +133,7 @@ export default class  {
 
   #renderNoFilms = (filmsList) => {
     if (this.#filmsData.length === 0) {
-      render(filmsList, new FilmsListTileView('There are no movies in our database'), RenderPosition.BEFOREEND);
+      render(filmsList, new FilmsListTitleView('There are no movies in our database'), RenderPosition.BEFOREEND);
     }
   }
 

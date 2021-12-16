@@ -1,6 +1,6 @@
 export const FILMS_LIST_COUNTER = 20;
 export const FILMS_COUNTER_PER_STEP = 5;
-export const FILMS_LIST_TITLE = {
+export const FilmsListTitles = {
   all: 'All movies. Upcoming',
   favorites: 'Favorites movies',
   watchList: 'In watchlist',
