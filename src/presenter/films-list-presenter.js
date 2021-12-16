@@ -16,7 +16,7 @@ export default class FilmsListPresenter {
   #filmsComponent = new FilmsView();
   #filmsListComponent = null;
   #filmsListContainerComponent = null;
-  #showMoreButton = new ShowMoreView();
+  #showMoreButtonComponent = new ShowMoreView();
   #sortComponent = new SortView();
   #filtersComponent = null;
 
@@ -44,7 +44,7 @@ export default class FilmsListPresenter {
     this.#renderFilters();
     this.#renderSort();
 
-    this.#renderFilmsContainer();
+    this.#renderFilmsSection();
   }
 
   #sortFilms = (sortType) => {
@@ -99,7 +99,7 @@ export default class FilmsListPresenter {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
     this.#renderFilmCount = FILMS_COUNTER_PER_STEP;
-    remove(this.#showMoreButton);
+    remove(this.#showMoreButtonComponent);
   }
 
   #renderFilms = (from, to) => {
@@ -113,14 +113,14 @@ export default class FilmsListPresenter {
     this.#renderFilmCount += FILMS_COUNTER_PER_STEP;
 
     if (this.#renderFilmCount >= this.#filmsData.length) {
-      remove(this.#showMoreButton);
+      remove(this.#showMoreButtonComponent);
     }
   }
 
   #renderShowMoreButton = () => {
-    render(this.#filmsListContainerComponent, this.#showMoreButton, RenderPosition.AFTEREND);
+    render(this.#filmsListContainerComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
 
-    this.#showMoreButton.setAddCardsClickHandler(this.#handleShowMoreButtonClick);
+    this.#showMoreButtonComponent.setAddCardsClickHandler(this.#handleShowMoreButtonClick);
   }
 
   #renderFilmsList = () => {
@@ -137,21 +137,21 @@ export default class FilmsListPresenter {
     }
   }
 
-  #renderFilmsListComponent = () => {
+  #renderFilmsListSection = () => {
     this.#filmsListComponent = new FilmsListView();
     this.#renderNoFilms(this.#filmsListComponent);
     render(this.#filmsComponent, this.#filmsListComponent, RenderPosition.BEFOREEND);
   }
 
-  #renderFilmsListContainerComponent = () => {
+  #renderFilmsListContainer = () => {
     this.#filmsListContainerComponent = new FilmsListContainerView();
     render(this.#filmsListComponent, this.#filmsListContainerComponent, RenderPosition.BEFOREEND);
   }
 
-  #renderFilmsContainer = () => {
+  #renderFilmsSection = () => {
     render(this.#mainContainer, this.#filmsComponent, RenderPosition.BEFOREEND);
-    this.#renderFilmsListComponent();
-    this.#renderFilmsListContainerComponent();
+    this.#renderFilmsListSection();
+    this.#renderFilmsListContainer();
 
     this.#renderFilmsList();
   }
