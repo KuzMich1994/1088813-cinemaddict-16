@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { addElipsis, getRandomInteger, getTimeFromMins } from '../utils/common';
+import { addElipsis, getTimeFromMins } from '../utils/common';
 import ComponentView from './component-view';
 
 const createFilmCardControlsTemplate = (isAlreadyWatched, isFavorite, isWatchList) => (`<div class="film-card__controls">
@@ -20,7 +20,7 @@ export const createFilmCardTemplate = (film) => {
       <p class="film-card__info">
         <span class="film-card__year">${year ? year : ''}</span>
         <span class="film-card__duration">${runtime ? getTimeFromMins(runtime) : ''}</span>
-        <span class="film-card__genre">${genre[getRandomInteger(0, genre.length - 1)]}</span>
+        <span class="film-card__genre">${genre[0]}</span>
       </p>
       <img src="./images/posters/${poster ? poster : ''}" alt="${name ? name : ''}" class="film-card__poster">
       <p class="film-card__description">${addElipsis(description, 140)}</p>
@@ -44,6 +44,36 @@ export default class FilmCardView extends ComponentView {
   setOpenPopupClickHandler = (callback) => {
     this._callback.openPopup = callback;
     this.element.querySelector('.film-card__link').addEventListener('click', this.#openPopupHandler);
+  }
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClick = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#alreadyWatchedClickHandler);
+  }
+
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchListClickHandler);
+  }
+
+  #favoriteClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  #alreadyWatchedClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  #watchListClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.watchlistClick();
   }
 
   #openPopupHandler = (e) => {
