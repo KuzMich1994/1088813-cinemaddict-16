@@ -10,6 +10,7 @@ export default class FilmsListTileView extends ComponentView {
 
   constructor(textContent, hiddenClass) {
     super();
+
     this.#textContent = textContent;
     this.#hiddenClass = hiddenClass;
   }
