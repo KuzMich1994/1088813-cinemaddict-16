@@ -19,7 +19,7 @@ export const generateFilm = () => ({
   runtime: generateContent(runtimes),
   rating: getRandomNumber(1, 10),
   genre: generateContent(genre),
-  comments: generateRandomComments().map((comment) => comment.id),
+  comments: generateRandomComments(),
 });
 
 

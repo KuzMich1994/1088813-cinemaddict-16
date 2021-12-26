@@ -53,7 +53,7 @@ export default class FilmCardPresenter {
   }
 
   #onEscKeyDown = (e) => {
-    if (e.key === 'Escape' || e.key === 'Esc') {
+    if ((e.key === 'Escape' || e.key === 'Esc') && this.#state.isOpen) {
       this.#state.isOpen = false;
       document.querySelector('.film-details').remove();
       document.body.classList.remove('hide-overflow');
