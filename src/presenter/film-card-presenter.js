@@ -1,18 +1,16 @@
 import FilmCardView from '../view/film-card-view';
-import FilmDetailsView from '../view/film-details-view';
-import {generateComment} from '../mock/comments';
 import {remove, render, RenderPosition, replace} from '../utils/render';
+import FilmDetailsPresenter from './film-details-presenter';
 
 export default class FilmCardPresenter {
   #filmsListContainerComponent = null;
   #filmCardComponent = null;
   #filmDetailsComponent = null;
 
-  #footer = document.querySelector('footer');
-
   #changeData = null;
   #state = null;
   #film = null;
+  #filmDetailsPresenter = null;
 
   constructor(filmsListContainer, changeData, state) {
     this.#filmsListContainerComponent = filmsListContainer;
@@ -26,17 +24,19 @@ export default class FilmCardPresenter {
     const prevFilmComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmCardView(film);
-    this.#filmDetailsComponent = new FilmDetailsView(film, generateComment);
 
     this.#filmCardComponent.setOpenPopupClickHandler(this.#handleOpenPopup);
     this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
-    this.#filmDetailsComponent.setClosePopupClickHandler(this.#handleClosePopup);
 
     if (prevFilmComponent === null) {
       render(this.#filmsListContainerComponent, this.#filmCardComponent, RenderPosition.BEFOREEND);
       return;
+    }
+
+    if (this.#filmDetailsPresenter !== null) {
+      this.#filmDetailsPresenter.handleControlsChange(film);
     }
 
     if (this.#filmsListContainerComponent.element.contains(prevFilmComponent.element)) {
@@ -53,9 +53,9 @@ export default class FilmCardPresenter {
   }
 
   #onEscKeyDown = (e) => {
-    if (e.key === 'Escape' || e.key === 'Esc') {
+    if ((e.key === 'Escape' || e.key === 'Esc') && this.#state.isOpen) {
       this.#state.isOpen = false;
-      remove(this.#filmDetailsComponent);
+      document.querySelector('.film-details').remove();
       document.body.classList.remove('hide-overflow');
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
@@ -75,17 +75,11 @@ export default class FilmCardPresenter {
 
   #handleOpenPopup = () => {
     if (!this.#state.isOpen) {
-      render(this.#footer, this.#filmDetailsComponent, RenderPosition.AFTEREND);
+      this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#changeData, this.#state);
+      this.#filmDetailsPresenter.init(this.#film);
       document.body.classList.add('hide-overflow');
       document.addEventListener('keydown', this.#onEscKeyDown);
     }
     this.#state.isOpen = true;
-  }
-
-  #handleClosePopup = () => {
-    this.#state.isOpen = false;
-    remove(this.#filmDetailsComponent);
-    document.body.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', this.#onEscKeyDown);
   }
 }
