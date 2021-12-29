@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import ComponentView from '../component-view';
 
-const createCommentTemplate = (comment) => {
+const createCommentTemplate = (comments) => comments.map((comment) => {
   const { author, date, emotion, commentMessage } = comment;
   const fullDate = dayjs(date).format('YYYY/MM/D H:mm');
 
@@ -20,17 +20,23 @@ const createCommentTemplate = (comment) => {
       </div>
     </li>`
   );
-};
+}).join('');
+
+const createFilmDetailsCommentListTemplate = (comments) => (
+  `<ul class="film-details__comments-list">
+      ${createCommentTemplate(comments)}
+   </ul>`
+);
 
 export default class FilmDetailsCommentView extends ComponentView {
-  #comment = null;
+  #comments = null;
 
-  constructor(comment) {
+  constructor(comments) {
     super();
-    this.#comment = comment;
+    this.#comments = comments;
   }
 
   get template() {
-    return createCommentTemplate(this.#comment);
+    return createFilmDetailsCommentListTemplate(this.#comments);
   }
 }

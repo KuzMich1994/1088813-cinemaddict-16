@@ -12,7 +12,7 @@ export default class FilmDetailsPresenter {
 
   #footer = document.querySelector('.footer');
   #filmDetailsTopContainer = null;
-  #filmDetailsCommentsList = null;
+  #filmDetailsCommentsTitle = null;
 
   #state = null;
   #changeData = null;
@@ -30,7 +30,8 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsControlsComponent = new FilmDetailsControlsView(this.#film);
     this.#filmDetailsNewCommentComponent = new FilmDetailsNewCommentView(this.#film.comments);
     this.#filmDetailsTopContainer = this.#filmDetailsComponent.element.querySelector('.film-details__top-container');
-    this.#filmDetailsCommentsList = this.#filmDetailsComponent.element.querySelector('.film-details__comments-list');
+    this.#filmDetailsCommentsTitle = this.#filmDetailsComponent.element.querySelector('.film-details__comments-title');
+    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(this.#film.comments);
     this.#filmDetailsComponent.setClosePopupClickHandler(this.#handleClosePopup);
     this.#filmDetailsNewCommentComponent.setFormSubmitHandler(this.#formSubmitHandler);
     this.#setControlsHandlers();
@@ -41,20 +42,14 @@ export default class FilmDetailsPresenter {
   #renderPopup = () => {
     render(this.#footer, this.#filmDetailsComponent, RenderPosition.BEFOREEND);
     render(this.#filmDetailsTopContainer, this.#filmDetailsControlsComponent, RenderPosition.BEFOREEND);
-    this.#film.comments.map((comment) => {
-      this.#filmDetailsCommentComponent = new FilmDetailsCommentView(comment);
-      render(this.#filmDetailsCommentsList, this.#filmDetailsCommentComponent, RenderPosition.BEFOREEND);
-    });
-    render(this.#filmDetailsCommentsList, this.#filmDetailsNewCommentComponent, RenderPosition.AFTEREND);
+    render(this.#filmDetailsCommentsTitle, this.#filmDetailsCommentComponent, RenderPosition.AFTEREND);
+    render(this.#filmDetailsCommentComponent, this.#filmDetailsNewCommentComponent, RenderPosition.AFTEREND);
   }
 
-  #formSubmitHandler = () => {
-    this.#film.comments.push(this.#filmDetailsNewCommentComponent.data);
-    this.#film.comments.map((comment) => {
-      remove(this.#filmDetailsCommentComponent);
-      this.#filmDetailsCommentComponent = new FilmDetailsCommentView(comment);
-      render(this.#filmDetailsCommentsList, this.#filmDetailsCommentComponent, RenderPosition.BEFOREEND);
-    });
+  #formSubmitHandler = (data) => {
+    remove(this.#filmDetailsCommentComponent);
+    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(data);
+    render(this.#filmDetailsCommentsTitle, this.#filmDetailsCommentComponent, RenderPosition.AFTEREND);
   }
 
   #handleFavoriteClick = () => {
