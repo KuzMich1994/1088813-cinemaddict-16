@@ -64,12 +64,12 @@ export default class FilmDetailsPresenter {
     this.#changeData({...this.#film, isWatchList: !this.#film.isWatchList});
   }
 
-  #onEscKeyDown = (e) => {
+  #escKeyDownHandler = (e) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
       this.#state.isOpen = false;
       remove(this.#filmDetailsComponent);
       document.body.classList.remove('hide-overflow');
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
@@ -77,7 +77,7 @@ export default class FilmDetailsPresenter {
     this.#state.isOpen = false;
     remove(this.#filmDetailsComponent);
     document.body.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', this.#onEscKeyDown);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #setControlsHandlers = () => {

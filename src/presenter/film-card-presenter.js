@@ -52,12 +52,12 @@ export default class FilmCardPresenter {
     remove(this.#filmDetailsComponent);
   }
 
-  #onEscKeyDown = (e) => {
+  #escKeyDownHandler = (e) => {
     if ((e.key === 'Escape' || e.key === 'Esc') && this.#state.isOpen) {
       this.#state.isOpen = false;
       document.querySelector('.film-details').remove();
       document.body.classList.remove('hide-overflow');
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
@@ -78,7 +78,7 @@ export default class FilmCardPresenter {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#changeData, this.#state);
       this.#filmDetailsPresenter.init(this.#film);
       document.body.classList.add('hide-overflow');
-      document.addEventListener('keydown', this.#onEscKeyDown);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
     }
     this.#state.isOpen = true;
   }
