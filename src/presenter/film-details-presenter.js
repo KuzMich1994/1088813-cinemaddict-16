@@ -3,6 +3,7 @@ import FilmDetailsControlsView from '../view/film-details/film-details-controls-
 import {remove, render, RenderPosition} from '../utils/render';
 import FilmDetailsNewCommentView from '../view/film-details/film-details-new-comment-view';
 import FilmDetailsCommentView from '../view/film-details/film-details-comment-view';
+import {UpdateType, UserAction} from '../const';
 
 export default class FilmDetailsPresenter {
   #filmDetailsComponent = null;
@@ -18,7 +19,7 @@ export default class FilmDetailsPresenter {
   #changeData = null;
   #film = null;
 
-  constructor(changeData, state) {
+  constructor(state, changeData) {
     this.#changeData = changeData;
     this.#state = state;
   }
@@ -53,15 +54,24 @@ export default class FilmDetailsPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isFavorite: !this.#film.isFavorite});
   }
 
   #handleAlreadyWatchedClick = () => {
-    this.#changeData({...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
   }
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#film, isWatchList: !this.#film.isWatchList});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isWatchList: !this.#film.isWatchList});
   }
 
   #escKeyDownHandler = (e) => {

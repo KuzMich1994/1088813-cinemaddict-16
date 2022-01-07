@@ -1,6 +1,7 @@
 import FilmCardView from '../view/film-card-view';
 import {remove, render, RenderPosition, replace} from '../utils/render';
 import FilmDetailsPresenter from './film-details-presenter';
+import {UpdateType, UserAction} from '../const';
 
 export default class FilmCardPresenter {
   #filmsListContainerComponent = null;
@@ -11,11 +12,13 @@ export default class FilmCardPresenter {
   #state = null;
   #film = null;
   #filmDetailsPresenter = null;
+  #filmsModel = null;
 
-  constructor(filmsListContainer, changeData, state) {
+  constructor(filmsListContainer, changeData, state, filmsModel) {
     this.#filmsListContainerComponent = filmsListContainer;
     this.#changeData = changeData;
     this.#state = state;
+    this.#filmsModel = filmsModel;
   }
 
   init = (film) => {
@@ -35,6 +38,7 @@ export default class FilmCardPresenter {
       return;
     }
 
+
     if (this.#filmDetailsPresenter !== null) {
       this.#filmDetailsPresenter.handleControlsChange(film);
     }
@@ -44,7 +48,12 @@ export default class FilmCardPresenter {
     }
 
     remove(prevFilmComponent);
+  }
 
+  handleFilmDetailsChange = (filmData) => {
+    if (this.#filmDetailsPresenter !== null) {
+      this.#filmDetailsPresenter.handleControlsChange(filmData);
+    }
   }
 
   destroy = () => {
@@ -62,20 +71,29 @@ export default class FilmCardPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isFavorite: !this.#film.isFavorite});
   }
 
   #handleAlreadyWatchedClick = () => {
-    this.#changeData({...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
   }
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#film, isWatchList: !this.#film.isWatchList});
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isWatchList: !this.#film.isWatchList});
   }
 
   #handleOpenPopup = () => {
     if (!this.#state.isOpen) {
-      this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#changeData, this.#state);
+      this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#state, this.#changeData);
       this.#filmDetailsPresenter.init(this.#film);
       document.body.classList.add('hide-overflow');
       document.addEventListener('keydown', this.#escKeyDownHandler);
