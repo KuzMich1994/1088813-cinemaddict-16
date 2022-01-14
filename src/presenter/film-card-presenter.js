@@ -12,13 +12,11 @@ export default class FilmCardPresenter {
   #state = null;
   #film = null;
   #filmDetailsPresenter = null;
-  #filmsModel = null;
 
-  constructor(filmsListContainer, changeData, state, filmsModel) {
+  constructor(filmsListContainer, changeData, state) {
     this.#filmsListContainerComponent = filmsListContainer;
     this.#changeData = changeData;
     this.#state = state;
-    this.#filmsModel = filmsModel;
   }
 
   init = (film) => {
@@ -48,6 +46,17 @@ export default class FilmCardPresenter {
     }
 
     remove(prevFilmComponent);
+  }
+
+  rerender(film) {
+    this.#filmCardComponent = new FilmCardView(film);
+
+    this.#filmCardComponent.setOpenPopupClickHandler(this.#handleOpenPopup);
+    this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
+    this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
+
+    render(this.#filmsListContainerComponent, this.#filmCardComponent, RenderPosition.BEFOREEND);
   }
 
   handleFilmDetailsChange = (filmData) => {
