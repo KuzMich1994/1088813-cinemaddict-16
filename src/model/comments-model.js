@@ -13,18 +13,18 @@ export default class CommentsModel extends AbstractObservable {
 
   addComment = (updateType, update) => {
     this.#comments = [
-      update,
       ...this.#comments,
+      update,
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, this.#comments);
   }
 
   deleteComment = (updateType, update) => {
-    const index = this.#comments.findIndex((comment) => comment.id === update.id);
+    const index = this.#comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting film');
+      throw new Error('Can\'t remove unexisting comment');
     }
 
     this.#comments = [
