@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import ComponentView from '../component-view';
+import SmartView from '../smart-view';
 
 const createCommentTemplate = (comments) => comments.map((comment) => {
   const { author, date, emotion, commentMessage } = comment;
@@ -15,7 +15,7 @@ const createCommentTemplate = (comments) => comments.map((comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${fullDate}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" data-id="${comment.id}">Delete</button>
         </p>
       </div>
     </li>`
@@ -28,7 +28,7 @@ const createFilmDetailsCommentListTemplate = (comments) => (
    </ul>`
 );
 
-export default class FilmDetailsCommentView extends ComponentView {
+export default class FilmDetailsCommentView extends SmartView {
   #comments = null;
 
   constructor(comments) {
@@ -38,5 +38,22 @@ export default class FilmDetailsCommentView extends ComponentView {
 
   get template() {
     return createFilmDetailsCommentListTemplate(this.#comments);
+  }
+
+  restoreHandlers = () => {
+    this.setDeleteCommentClickHandler(this._callback.deleteComment);
+  }
+
+  setDeleteCommentClickHandler = (callback) => {
+    this._callback.deleteComment = callback;
+    const deleteButtons = this.element.querySelectorAll('.film-details__comment-delete');
+    deleteButtons.forEach((deleteButton) => {
+      deleteButton.addEventListener('click', this.#deleteCommentClickHandler);
+    });
+  }
+
+  #deleteCommentClickHandler = (e) => {
+    e.preventDefault();
+    this._callback.deleteComment(e.target.dataset.id);
   }
 }

@@ -4,6 +4,10 @@ import FilmsCounterView from './view/films-counter-view';
 import { generateFilm } from './mock/film';
 import { FILMS_LIST_COUNTER } from './const';
 import FilmsListPresenter from './presenter/films-list-presenter';
+import FilmsModel from './model/films-model';
+import FilterModel from './model/filter-model';
+import FilterPresenter from './presenter/filter-presenter';
+import CommentsModel from './model/comments-model';
 
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
@@ -19,9 +23,19 @@ const getAllFilms = () => {
 };
 const filmsFixture = getAllFilms();
 
+const filmsModel = new FilmsModel();
+
+filmsModel.films = filmsFixture;
+
+const filterModel = new FilterModel();
+
+const commentsModel = new CommentsModel();
+
 render(header, new HeaderProfileView(), RenderPosition.BEFOREEND);
 render(footerStatistics, new FilmsCounterView(filmsFixture), RenderPosition.BEFOREEND);
 
-const filmsPresenter = new FilmsListPresenter(main);
+const filmsPresenter = new FilmsListPresenter(main, filmsModel, filterModel, commentsModel);
+const filterPresenter = new FilterPresenter(main, filterModel, filmsModel);
 
-filmsPresenter.init(filmsFixture);
+filmsPresenter.init();
+filterPresenter.init();

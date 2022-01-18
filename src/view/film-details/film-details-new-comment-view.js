@@ -2,6 +2,7 @@ import SmartView from '../smart-view';
 import {smiles} from '../../mock/data';
 import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';
+import he from 'he';
 
 const createEmojiTemplate = (emotions, commentEmotion) => emotions.map((emotion) => {
   const isChecked = (emotion === commentEmotion) ? 'checked' : '';
@@ -65,13 +66,13 @@ export default class FilmDetailsNewCommentView extends SmartView {
       }
 
       e.preventDefault();
-      this._data.comments.push({
+      this._data.newComment = {
         id: nanoid(),
         author: 'test',
         emotion: this._data.activeEmotion,
         commentMessage: this._data.commentMessage,
         date: dayjs(),
-      });
+      };
       this._callback.formSubmit(FilmDetailsNewCommentView.parseDataToComment(this._data));
       this.updateElement();
     }
@@ -79,7 +80,7 @@ export default class FilmDetailsNewCommentView extends SmartView {
 
   #commentTextareaHandler = (e) => {
     this.updateData({
-      commentMessage: e.target.value,
+      commentMessage: he.encode(e.target.value),
     }, true);
 
   }
@@ -102,14 +103,15 @@ export default class FilmDetailsNewCommentView extends SmartView {
     comments: [...comments],
     activeEmotion: null,
     commentMessage: '',
+    newComment: null,
   })
 
   static parseDataToComment = (data) => {
-    const comments = [...data.comments];
+    const comment = data.newComment;
 
     delete data.activeEmotion;
     delete data.commentMessage;
 
-    return comments;
+    return comment;
   }
 }
