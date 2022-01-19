@@ -22,7 +22,7 @@ export const createFilmCardTemplate = (film) => {
         <span class="film-card__duration">${runtime ? getTimeFromMins(runtime) : ''}</span>
         <span class="film-card__genre">${genre[0]}</span>
       </p>
-      <img src="./images/posters/${poster ? poster : ''}" alt="${name ? name : ''}" class="film-card__poster">
+      <img src="${poster ? poster : ''}" alt="${name ? name : ''}" class="film-card__poster">
       <p class="film-card__description">${addElipsis(description, 140)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>

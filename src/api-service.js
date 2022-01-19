@@ -14,20 +14,21 @@ export default class ApiService {
       .then(ApiService.parseResponse);
   }
 
+  getComments = (filmId) => this.#load({url: `comments/${filmId}`})
+    .then(ApiService.parseResponse)
+
   updateFilm = async (film) => {
     const response = await this.#load({
       url: `movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(this.#adaptToServer(film)),
+      body: JSON.stringify(this.#adaptFilmToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
-  #adaptToServer = ({
+  #adaptFilmToServer = ({
     id,
     poster,
     name,
@@ -35,7 +36,7 @@ export default class ApiService {
     rating,
     director,
     writers,
-    isWatchlist,
+    isWatchList,
     isFavorite,
     isAlreadyWatched,
     watchingDate,
@@ -70,12 +71,22 @@ export default class ApiService {
       description,
     },
     'user_details': {
-      watchlist: isWatchlist,
+      watchlist: isWatchList,
       'already_watched': isAlreadyWatched,
       'watching_date': watchingDate,
       favorite: isFavorite,
     }
   })
+
+  #adaptCommentToServer = (comment) => {
+    const adaptedComment = {
+      comment: comment['commentMessage'],
+    };
+
+    delete adaptedComment['commentMessage'];
+
+    return adaptedComment;
+  }
 
   #load = async ({
     url,

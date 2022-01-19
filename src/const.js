@@ -1,13 +1,11 @@
-export const FILMS_LIST_COUNTER = 20;
 export const FILMS_COUNTER_PER_STEP = 5;
-export const FilmsListTitles = {
-  all: 'All movies. Upcoming',
-  favorites: 'Favorites movies',
-  watchList: 'In watchlist',
-  history: 'Browsing history',
-  topRated: 'Top Rated',
-  mostCommented: 'Most commented',
-};
+
+export const Smiles = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
+];
 
 export const SortType = {
   DEFAULT: 'default',
@@ -25,6 +23,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const FilterType = {
@@ -38,3 +37,6 @@ export const Method = {
   PUT: 'PUT',
   GET: 'GET',
 };
+
+export const AUTHORIZATION = 'Basic ui312gco2n835cy27q5y';
+export const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';

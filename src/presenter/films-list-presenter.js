@@ -10,6 +10,8 @@ import FilmCardPresenter from './film-card-presenter';
 import dayjs from 'dayjs';
 import {filter} from '../utils/filter';
 import FilmDetailsPresenter from './film-details-presenter';
+import LoadingView from '../view/loading-view';
+import FilmsCounterView from '../view/films-counter-view';
 
 export default class FilmsListPresenter {
   #filmsComponent = new FilmsView();
@@ -17,8 +19,10 @@ export default class FilmsListPresenter {
   #filmsListContainerComponent = null;
   #showMoreButtonComponent = null;
   #sortComponent = null;
+  #loadingComponent = new LoadingView();
 
   #mainContainer = null;
+  #footerStatistics = document.querySelector('.footer__statistics');
 
   #state = {
     isOpen: false,
@@ -32,6 +36,7 @@ export default class FilmsListPresenter {
   #filmsModel = null;
   #filtersModel = null;
   #commentsModel = null;
+  #isLoading = true;
 
   constructor(mainContainer, filmsModel, filtersModel, commentsModel) {
     this.#mainContainer = mainContainer;
@@ -104,6 +109,14 @@ export default class FilmsListPresenter {
         this.#renderFilmsSection();
         break;
       }
+      case UpdateType.INIT: {
+        this.#isLoading = false;
+        this.#clearFilmsList();
+        remove(this.#loadingComponent);
+        this.#renderFilmsSection();
+        this.#renderFooterStatistics();
+        break;
+      }
     }
   }
 
@@ -151,6 +164,10 @@ export default class FilmsListPresenter {
     }
   }
 
+  #renderLoading = () => {
+    render(this.#filmsListComponent, this.#loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   #renderSort = () => {
     this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
@@ -191,6 +208,10 @@ export default class FilmsListPresenter {
   }
 
   #renderNoFilms = (filmsList) => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     render(filmsList, new FilmsListTitleView(this.#filtersModel.filter), RenderPosition.BEFOREEND);
   }
 
@@ -214,6 +235,10 @@ export default class FilmsListPresenter {
     this.#renderFilmsListSection();
     this.#renderFilmsListContainer();
     this.#renderFilmsList();
+  }
+
+  #renderFooterStatistics = () => {
+    render(this.#footerStatistics, new FilmsCounterView(this.#filmsModel.films), RenderPosition.BEFOREEND);
   }
 
   #renderDetails = (film) => () => {

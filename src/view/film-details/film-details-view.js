@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import {getTimeFromMins} from '../../utils/common';
 
 const createFilmDetailsTemplate = (film) => {
-  const {name, description, poster, rating, release, director, actor, writers, runtime, genre} = film;
+  const {name, originalName, description, poster, rating, ageRating, release, director, actor, writers, runtime, genre} = film;
   const fullReleaseDate = dayjs(release.date).format('D MMMM YYYY');
 
   return (
@@ -17,16 +17,16 @@ const createFilmDetailsTemplate = (film) => {
 
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
 
-              <p class="film-details__age">18+</p>
+              <p class="film-details__age">${ageRating}+</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
                   <h3 class="film-details__title">${name ? name : ''}</h3>
-                  <p class="film-details__title-original">Original: ${name ? name : ''}</p>
+                  <p class="film-details__title-original">Original: ${originalName ? originalName : ''}</p>
                 </div>
 
                 <div class="film-details__rating">
@@ -77,7 +77,6 @@ const createFilmDetailsTemplate = (film) => {
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments </h3>
 
 
           </section>
