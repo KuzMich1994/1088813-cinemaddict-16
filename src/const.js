@@ -33,3 +33,8 @@ export const FilterType = {
   HISTORY: 'HISTORY',
   FAVORITES: 'FAVORITES',
 };
+
+export const Method = {
+  PUT: 'PUT',
+  GET: 'GET',
+};
