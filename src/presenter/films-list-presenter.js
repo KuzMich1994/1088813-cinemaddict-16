@@ -1,5 +1,5 @@
 import ShowMoreView from '../view/show-more-button-view';
-import {FILMS_COUNTER_PER_STEP, SortType, UpdateType, UserAction} from '../const';
+import {FILMS_COUNTER_PER_STEP, FilterType, SortType, UpdateType, UserAction} from '../const';
 import { remove, render, RenderPosition } from '../utils/render';
 import SortView from '../view/sort-view';
 import FilmsView from '../view/films-view';
@@ -12,6 +12,7 @@ import {filter} from '../utils/filter';
 import FilmDetailsPresenter from './film-details-presenter';
 import LoadingView from '../view/loading-view';
 import FilmsCounterView from '../view/films-counter-view';
+import HeaderProfileView from '../view/header-profile-view';
 
 export default class FilmsListPresenter {
   #filmsComponent = new FilmsView();
@@ -20,9 +21,11 @@ export default class FilmsListPresenter {
   #showMoreButtonComponent = null;
   #sortComponent = null;
   #loadingComponent = new LoadingView();
+  #headerProfileComponent = null;
 
   #mainContainer = null;
   #footerStatistics = document.querySelector('.footer__statistics');
+  #header = document.querySelector('.header');
 
   #state = {
     isOpen: false,
@@ -64,6 +67,12 @@ export default class FilmsListPresenter {
     return  filteredFilms;
   }
 
+  get historyFilmsCount() {
+    const films = this.#filmsModel.films;
+
+    return filter[FilterType.HISTORY](films).length;
+  }
+
   init = () => {
     this.#renderFilmsSection();
   }
@@ -101,6 +110,8 @@ export default class FilmsListPresenter {
           this.#filmDetailsPresenter.handleControlsChange(data);
         }
         this.#clearFilmsList();
+        remove(this.#headerProfileComponent);
+        this.#renderProfileName();
         this.#renderFilmsSection();
         break;
       }
@@ -113,6 +124,7 @@ export default class FilmsListPresenter {
         this.#isLoading = false;
         this.#clearFilmsList();
         remove(this.#loadingComponent);
+        this.#renderProfileName();
         this.#renderFilmsSection();
         this.#renderFooterStatistics();
         break;
@@ -162,6 +174,11 @@ export default class FilmsListPresenter {
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
     }
+  }
+
+  #renderProfileName = () => {
+    this.#headerProfileComponent = new HeaderProfileView(this.historyFilmsCount);
+    render(this.#header, this.#headerProfileComponent, RenderPosition.BEFOREEND);
   }
 
   #renderLoading = () => {

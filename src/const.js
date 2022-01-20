@@ -1,6 +1,6 @@
 export const FILMS_COUNTER_PER_STEP = 5;
 
-export const Smiles = [
+export const SMILES = [
   'smile',
   'sleeping',
   'puke',

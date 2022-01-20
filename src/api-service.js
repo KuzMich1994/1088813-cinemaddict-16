@@ -80,6 +80,7 @@ export default class ApiService {
 
   #adaptCommentToServer = (comment) => {
     const adaptedComment = {
+      ...comment,
       comment: comment['commentMessage'],
     };
 
