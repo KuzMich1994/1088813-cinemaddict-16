@@ -1,5 +1,5 @@
 import SmartView from '../smart-view';
-import {smiles} from '../../mock/data';
+import {SMILES} from '../../const';
 import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';
 import he from 'he';
@@ -30,7 +30,7 @@ const createNewCommentTemplate = (data) => (
         </label>
 
         <div class="film-details__emoji-list">
-            ${createEmojiTemplate(smiles, data.activeEmotion)}
+            ${createEmojiTemplate(SMILES, data.activeEmotion)}
         </div>
       </div>`
 );
