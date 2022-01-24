@@ -270,18 +270,23 @@ export default class FilmsListPresenter {
   }
 
   #renderDetails = (film) => () => {
-    if (!this.#state.isOpen) {
-      this.#filmDetailsPresenter = new FilmDetailsPresenter({
-        state: this.#state,
-        changeData: this.#handleViewAction,
-        commentsModel: this.#commentsModel,
-        filmsModel: this.#filmsModel,
-        handleChangeList: this.reRenderFilms,
-      });
-      this.#filmDetailsPresenter.init(film);
-      document.body.classList.add('hide-overflow');
-      document.addEventListener('keydown', this.#escKeyDownHandler);
+    // if (!this.#state.isOpen) {
+    //
+    // }
+    if (this.#filmDetailsPresenter !== null) {
+      this.#filmDetailsPresenter.destroy();
     }
+
+    this.#filmDetailsPresenter = new FilmDetailsPresenter({
+      state: this.#state,
+      changeData: this.#handleViewAction,
+      commentsModel: this.#commentsModel,
+      filmsModel: this.#filmsModel,
+      handleChangeList: this.reRenderFilms,
+    });
+    this.#filmDetailsPresenter.init(film);
+    document.body.classList.add('hide-overflow');
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#state.isOpen = true;
   }
 

@@ -33,6 +33,7 @@ export default class MainNavigationView extends ComponentView {
       document.querySelectorAll('.main-navigation__item').forEach((navItem) => {
         navItem.classList.remove('main-navigation__item--active');
       });
+      document.title = 'Cinemaddict - Stats';
       this._callback.showStatistics();
     } else {
       document.querySelector('.main-navigation__additional').classList.remove('main-navigation__additional--active');

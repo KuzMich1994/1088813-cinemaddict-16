@@ -52,7 +52,7 @@ export default class FiltersView extends ComponentView {
     target = target.closest('.main-navigation__item');
 
     e.preventDefault();
-
+    document.title = `Cinemaddict - ${target.id}`;
     this._callback.filterTypeChange(target.id);
   }
 }
