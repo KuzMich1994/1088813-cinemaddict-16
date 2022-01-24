@@ -54,6 +54,7 @@ export default class FilmDetailsCommentView extends ComponentView {
     const deleteButtons = this.element.querySelectorAll('.film-details__comment-delete');
     deleteButtons.forEach((deleteButton) => {
       deleteButton.disabled = true;
+      e.target.textContent = 'Deleting...';
     });
 
   }
