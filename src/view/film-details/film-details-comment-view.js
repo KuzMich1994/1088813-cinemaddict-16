@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import SmartView from '../smart-view';
+import ComponentView from '../component-view';
 
 const createCommentTemplate = (comments) => comments.map((comment) => {
   const { author, date, emotion, commentMessage } = comment;
@@ -28,7 +28,7 @@ const createFilmDetailsCommentListTemplate = (comments) => (
    </ul>`
 );
 
-export default class FilmDetailsCommentView extends SmartView {
+export default class FilmDetailsCommentView extends ComponentView {
   #comments = null;
 
   constructor(comments) {
@@ -38,10 +38,6 @@ export default class FilmDetailsCommentView extends SmartView {
 
   get template() {
     return createFilmDetailsCommentListTemplate(this.#comments);
-  }
-
-  restoreHandlers = () => {
-    this.setDeleteCommentClickHandler(this._callback.deleteComment);
   }
 
   setDeleteCommentClickHandler = (callback) => {
@@ -55,5 +51,10 @@ export default class FilmDetailsCommentView extends SmartView {
   #deleteCommentClickHandler = (e) => {
     e.preventDefault();
     this._callback.deleteComment(e.target.dataset.id);
+    const deleteButtons = this.element.querySelectorAll('.film-details__comment-delete');
+    deleteButtons.forEach((deleteButton) => {
+      deleteButton.disabled = true;
+    });
+
   }
 }

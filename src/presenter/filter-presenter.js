@@ -1,19 +1,31 @@
 import {FilterType, UpdateType} from '../const';
 import {filter} from '../utils/filter';
-import MainNavigationView from '../view/navigation-view';
 import {remove, render, RenderPosition} from '../utils/render';
+import FiltersView from '../view/filters-view';
 
 export default class FilterPresenter {
-  #mainContainer = null;
   #filterModel = null;
   #filmsModel = null;
+  #filmsPresenter = null;
 
   #filtersComponent = null;
+  #navigationComponent = null;
 
-  constructor(mainContainer, filterModel, filmsModel) {
-    this.#mainContainer = mainContainer;
+  #removeStatistics = null;
+
+  constructor({
+    navigationComponent,
+    filterModel,
+    filmsModel,
+    filmsPresenter,
+    removeStatistics,
+  }) {
+    this.#navigationComponent = navigationComponent;
     this.#filterModel = filterModel;
     this.#filmsModel = filmsModel;
+    this.#filmsPresenter = filmsPresenter;
+
+    this.#removeStatistics = removeStatistics;
 
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#filmsModel.addObserver(this.#handleModelEvent);
@@ -59,12 +71,12 @@ export default class FilterPresenter {
 
   #initFiltersComponent = () => {
     const filters = this.filters;
-    this.#filtersComponent = new MainNavigationView(filters, this.#filterModel.filter);
+    this.#filtersComponent = new FiltersView(filters, this.#filterModel.filter);
     this.#filtersComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
   }
 
   #renderFilters = () => {
-    render(this.#mainContainer, this.#filtersComponent, RenderPosition.AFTERBEGIN);
+    render(this.#navigationComponent, this.#filtersComponent, RenderPosition.AFTERBEGIN);
   }
 
   #handleModelEvent = () => {
@@ -75,6 +87,9 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
+
+    this.#removeStatistics();
+    this.#filmsPresenter.reInit();
 
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   }

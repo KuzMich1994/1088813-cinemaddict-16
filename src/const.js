@@ -36,7 +36,24 @@ export const FilterType = {
 export const Method = {
   PUT: 'PUT',
   GET: 'GET',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+export const State = {
+  ADDITION: 'ADDITION',
+  DELETING: 'DELETING',
 };
 
 export const AUTHORIZATION = 'Basic ui312gco2n835cy27q5y';
 export const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
+
+export const START_STATISTIC_PERIOD = 'all-time';
+
+export const StatisticsRadioButtons = [
+  { type : 'all-time', name : 'All time'},
+  { type : 'today', name : 'Today'},
+  { type : 'week', name : 'Week'},
+  { type : 'month', name : 'Month'},
+  { type : 'year', name : 'Year'},
+];
