@@ -28,6 +28,22 @@ export default class ApiService {
     return await ApiService.parseResponse(response);
   }
 
+  addComment = async (comment, filmId) => {
+    const response = await this.#load({
+      url: `comments/${filmId}`,
+      method: Method.POST,
+      body: JSON.stringify(this.#adaptCommentToServer(comment)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
+
+    return await ApiService.parseResponse(response);
+  }
+
+  deleteComment = async (comment) => await this.#load({
+    url: `comments/${comment}`,
+    method: Method.DELETE,
+  })
+
   #adaptFilmToServer = ({
     id,
     poster,

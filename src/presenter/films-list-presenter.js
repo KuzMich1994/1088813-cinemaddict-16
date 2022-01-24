@@ -47,8 +47,7 @@ export default class FilmsListPresenter {
     this.#filtersModel = filtersModel;
     this.#commentsModel = commentsModel;
 
-    this.#filmsModel.addObserver(this.#handleModelEvent);
-    this.#filtersModel.addObserver(this.#handleModelEvent);
+
   }
 
   get films() {
@@ -73,7 +72,15 @@ export default class FilmsListPresenter {
     return filter[FilterType.HISTORY](films).length;
   }
 
+
   init = () => {
+    this.#renderFilmsSection();
+    this.#addModelObserver();
+  }
+
+  reInit = () => {
+    this.#clearFilmsList({resetRenderedFilmsCount: true, resetSortType: true});
+    this.#addModelObserver();
     this.#renderFilmsSection();
   }
 
@@ -82,18 +89,22 @@ export default class FilmsListPresenter {
     this.#renderFilmsSection();
   }
 
+  destroy = () => {
+    this.#filmsModel.removeObserver(this.#handleModelEvent);
+    this.#filtersModel.removeObserver(this.#handleModelEvent);
+    remove(this.#sortComponent);
+    remove(this.#filmsComponent);
+  }
+
+  #addModelObserver = () => {
+    this.#filmsModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
+  }
+
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM: {
         this.#filmsModel.updateFilms(updateType, update);
-        break;
-      }
-      case UserAction.ADD_COMMENT: {
-        this.#commentsModel.addComment(updateType, update);
-        break;
-      }
-      case UserAction.REMOVE_COMMENT: {
-        this.#commentsModel.deleteComment(updateType, update);
         break;
       }
     }

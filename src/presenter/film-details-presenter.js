@@ -3,7 +3,7 @@ import FilmDetailsControlsView from '../view/film-details/film-details-controls-
 import {remove, render, RenderPosition} from '../utils/render';
 import FilmDetailsNewCommentView from '../view/film-details/film-details-new-comment-view';
 import FilmDetailsCommentView from '../view/film-details/film-details-comment-view';
-import {UpdateType, UserAction} from '../const';
+import {State, UpdateType, UserAction} from '../const';
 import CommentsCounterView from '../view/film-details/comments-counter-view';
 import FilmDetailsCommentsLoadingView from '../view/film-details/film-details-comments-loading-view';
 import FilmDetailsCommentsTitleView from '../view/film-details/film-details-comments-title-view';
@@ -21,7 +21,12 @@ export default class FilmDetailsPresenter {
   #filmDetailsTopContainer = null;
   #filmDetailsCommentsWrapper = null;
 
-  #state = null;
+  #state = {
+    isOpen: false,
+    isAddingComment: false,
+    isRemovingComment: false,
+  };
+
   #changeData = null;
   #film = null;
   #commentsModel = null;
@@ -31,7 +36,7 @@ export default class FilmDetailsPresenter {
 
   constructor({state, changeData, commentsModel, filmsModel, handleChangeList}) {
     this.#changeData = changeData;
-    this.#state = state;
+    this.#state.isOpen = state;
     this.#commentsModel = commentsModel;
     this.#filmsModel = filmsModel;
     this.#handleChangeList = handleChangeList;
@@ -50,14 +55,23 @@ export default class FilmDetailsPresenter {
     remove(this.#filmDetailsComponent);
   }
 
+  setViewState = (state) => {
+    switch (state) {
+      case State.ADDITION: {
+        this.#filmDetailsNewCommentComponent.updateData({
+          isDisabled: true,
+        });
+        break;
+      }
+    }
+  }
+
   #initComments = async () => {
     await this.#commentsModel.init(this.#film.id);
-    this.#filmDetailsNewCommentComponent = new FilmDetailsNewCommentView(this.#commentsModel.comments);
-    this.#filmDetailsCommentsCounter = new CommentsCounterView(this.#commentsModel.comments);
-    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(this.#commentsModel.comments);
+    this.#renderComments();
     this.#filmDetailsNewCommentComponent.setFormSubmitHandler(this.#handleAddComment);
     this.#filmDetailsCommentComponent.setDeleteCommentClickHandler(this.#handleDeleteComment);
-    this.#renderComments();
+    remove(this.#filmDetailsCommentsLoadingComponent);
   }
 
   #initPopup = () => {
@@ -74,7 +88,8 @@ export default class FilmDetailsPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.ADD_COMMENT: {
-        this.#commentsModel.addComment(updateType, update);
+        this.setViewState(State.ADDITION);
+        this.#commentsModel.addComment(updateType, update, this.#film.id);
         break;
       }
       case UserAction.REMOVE_COMMENT: {
@@ -87,22 +102,39 @@ export default class FilmDetailsPresenter {
   #handleModelEvent = (updateType) => {
     switch (updateType) {
       case UpdateType.MINOR: {
-        this.#rerenderCommentsComponent(this.#commentsModel.comments);
-        this.#film.comments = this.#commentsModel.comments;
-        this.#handleChangeList();
+        if (this.#state.isAddingComment) {
+          this.#state.isAddingComment = false;
+          this.#rerenderCommentsComponent();
+          this.#handleChangeList();
+        }
+        if (this.#state.isRemovingComment) {
+          this.#state.isRemovingComment = false;
+          this.#rerenderCommentsComponent();
+          this.#handleChangeList();
+        }
         break;
       }
       case UpdateType.INIT: {
         this.#isLoading = false;
         remove(this.#filmDetailsCommentsLoadingComponent);
-        render(this.#filmDetailsCommentsWrapper, this.#filmDetailsCommentsTitleComponent, RenderPosition.BEFOREEND);
       }
     }
   }
 
   #renderComments = () => {
-    render(this.#filmDetailsCommentsTitleComponent, this.#filmDetailsCommentComponent, RenderPosition.AFTEREND);
+    const comments = this.#commentsModel.comments;
+    this.#film.comments = comments.map((comment) => comment.id);
+
+    this.#filmDetailsNewCommentComponent = new FilmDetailsNewCommentView(comments);
+    this.#filmDetailsCommentsCounter = new CommentsCounterView(comments);
+    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(comments);
+    this.#filmDetailsCommentsTitleComponent = new FilmDetailsCommentsTitleView();
+    this.#filmDetailsNewCommentComponent.setFormSubmitHandler(this.#handleAddComment);
+    this.#filmDetailsCommentComponent.setDeleteCommentClickHandler(this.#handleDeleteComment);
+
+    render(this.#filmDetailsCommentsWrapper, this.#filmDetailsCommentsTitleComponent, RenderPosition.BEFOREEND);
     render(this.#filmDetailsCommentsTitleComponent, this.#filmDetailsCommentsCounter, RenderPosition.BEFOREEND);
+    render(this.#filmDetailsCommentsTitleComponent, this.#filmDetailsCommentComponent, RenderPosition.AFTEREND);
     render(this.#filmDetailsCommentComponent, this.#filmDetailsNewCommentComponent, RenderPosition.AFTEREND);
   }
 
@@ -112,18 +144,15 @@ export default class FilmDetailsPresenter {
     render(this.#filmDetailsCommentsWrapper, this.#filmDetailsCommentsLoadingComponent, RenderPosition.BEFOREEND);
   }
 
-  #rerenderCommentsComponent = (comments) => {
-    remove(this.#filmDetailsCommentsCounter);
-    this.#filmDetailsCommentsCounter = new CommentsCounterView(comments);
-    render(this.#filmDetailsCommentsTitleComponent, this.#filmDetailsCommentsCounter, RenderPosition.BEFOREEND);
+  #removeComments = () => {
+    remove(this.#filmDetailsCommentsTitleComponent);
     remove(this.#filmDetailsCommentComponent);
-    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(comments);
-    this.#filmDetailsCommentComponent.setDeleteCommentClickHandler(this.#handleDeleteComment);
-    render(this.#filmDetailsCommentsTitleComponent, this.#filmDetailsCommentComponent, RenderPosition.AFTEREND);
     remove(this.#filmDetailsNewCommentComponent);
-    this.#filmDetailsNewCommentComponent = new FilmDetailsNewCommentView(comments);
-    this.#filmDetailsNewCommentComponent.setFormSubmitHandler(this.#handleAddComment);
-    render(this.#filmDetailsCommentComponent, this.#filmDetailsNewCommentComponent, RenderPosition.AFTEREND);
+  }
+
+  #rerenderCommentsComponent = () => {
+    this.#removeComments();
+    this.#renderComments();
   }
 
   #handleFavoriteClick = () => {
@@ -148,6 +177,7 @@ export default class FilmDetailsPresenter {
   }
 
   #handleAddComment = (comment) => {
+    this.#state.isAddingComment = true;
     this.#handleViewAction(
       UserAction.ADD_COMMENT,
       UpdateType.MINOR,
@@ -156,10 +186,11 @@ export default class FilmDetailsPresenter {
   }
 
   #handleDeleteComment = (dataId) => {
+    this.#state.isRemovingComment = true;
     this.#handleViewAction(
       UserAction.REMOVE_COMMENT,
       UpdateType.MINOR,
-      dataId
+      dataId,
     );
   }
 

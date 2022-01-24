@@ -1,10 +1,9 @@
 import SmartView from '../smart-view';
 import {SMILES} from '../../const';
-import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';
 import he from 'he';
 
-const createEmojiTemplate = (emotions, commentEmotion) => emotions.map((emotion) => {
+const createEmojiTemplate = (emotions, commentEmotion, isDisabled) => emotions.map((emotion) => {
   const isChecked = (emotion === commentEmotion) ? 'checked' : '';
 
   return `<input
@@ -13,6 +12,7 @@ const createEmojiTemplate = (emotions, commentEmotion) => emotions.map((emotion)
              type="radio"
              id="emoji-${emotion}"
              ${isChecked}
+             ${isDisabled ? 'disabled' : ''}
              value="${emotion}">
               <label class="film-details__emoji-label" for="emoji-${emotion}" >
                 <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji" data-emotion="${emotion}">
@@ -26,11 +26,11 @@ const createNewCommentTemplate = (data) => (
         </div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${data.commentMessage ? data.commentMessage : ''}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" ${data.isDisabled ? 'disabled' : ''} name="comment">${data.commentMessage ? data.commentMessage : ''}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
-            ${createEmojiTemplate(SMILES, data.activeEmotion)}
+            ${createEmojiTemplate(SMILES, data.activeEmotion, data.isDisabled)}
         </div>
       </div>`
 );
@@ -67,8 +67,6 @@ export default class FilmDetailsNewCommentView extends SmartView {
 
       e.preventDefault();
       this._data.newComment = {
-        id: nanoid(),
-        author: 'test',
         emotion: this._data.activeEmotion,
         commentMessage: this._data.commentMessage,
         date: dayjs(),
@@ -104,6 +102,7 @@ export default class FilmDetailsNewCommentView extends SmartView {
     activeEmotion: null,
     commentMessage: '',
     newComment: null,
+    isDisabled: false,
   })
 
   static parseDataToComment = (data) => {
@@ -111,6 +110,7 @@ export default class FilmDetailsNewCommentView extends SmartView {
 
     delete data.activeEmotion;
     delete data.commentMessage;
+    delete data.isDisabled;
 
     return comment;
   }
