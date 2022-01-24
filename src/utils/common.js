@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
+
 export const getTimeFromMins = (mins, settings = { minutesOnly: false, hoursOnly: false }) => {
   const hours = Math.trunc(mins/60);
   const minutes = mins % 60;
