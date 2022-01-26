@@ -47,7 +47,6 @@ export default class FiltersView extends ComponentView {
       .forEach((mainNavigationItem) => {
         mainNavigationItem.addEventListener('click', this.#filterTypeChangeHandler);
       });
-    // this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
 
   #filterTypeChangeHandler = (e) => {
