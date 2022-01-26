@@ -84,10 +84,6 @@ export default class FilterPresenter {
   }
 
   #handleFilterTypeChange = (filterType) => {
-    if (this.#filterModel.filter === filterType) {
-      return;
-    }
-
     this.#removeStatistics();
     this.#filmsPresenter.reInit();
 

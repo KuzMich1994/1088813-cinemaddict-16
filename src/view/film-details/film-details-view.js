@@ -60,7 +60,7 @@ const createFilmDetailsTemplate = (film) => {
                   <td class="film-details__cell">${release.releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${genre.length === 1 ? 'Genre' : 'Genres'}</td>
                   <td class="film-details__cell">
                     ${genre.map((genreElement) => `<span class="film-details__genre">${genreElement}</span>`).join('')}
                   </td>

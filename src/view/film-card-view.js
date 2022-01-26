@@ -9,7 +9,7 @@ const createFilmCardControlsTemplate = (isAlreadyWatched, isFavorite, isWatchLis
     </div>`);
 
 export const createFilmCardTemplate = (film) => {
-  const { name, release, poster, runtime, genre, description, rating, isAlreadyWatched, isFavorite, isWatchList, comments } = film;
+  const { name, release, poster, runtime, genre, description, rating, isAlreadyWatched, isFavorite, isWatchList, commentsIds } = film;
   const year = dayjs(release.date).year();
   const controlsTemplate = createFilmCardControlsTemplate(isAlreadyWatched, isFavorite, isWatchList);
 
@@ -24,7 +24,7 @@ export const createFilmCardTemplate = (film) => {
       </p>
       <img src="${poster ? poster : ''}" alt="${name ? name : ''}" class="film-card__poster">
       <p class="film-card__description">${addElipsis(description, 140)}</p>
-      <span class="film-card__comments">${comments.length} comments</span>
+      <span class="film-card__comments">${commentsIds.length} comments</span>
     </a>
     ${controlsTemplate}
   </article>`);

@@ -17,8 +17,6 @@ export default class MainPresenter {
   #mainContainer = document.querySelector('.main');
 
   constructor({
-    // filmsListPresenter,
-    // filtersPresenter,
     filmsModel,
     filtersModel,
     commentsModel,
