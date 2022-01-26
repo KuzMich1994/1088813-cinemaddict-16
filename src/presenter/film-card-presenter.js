@@ -10,9 +10,6 @@ export default class FilmCardPresenter {
   #changeData = null;
   #film = null;
 
-  /**
-   * @type {function}
-   */
   #handleOpenPopup = null;
 
 

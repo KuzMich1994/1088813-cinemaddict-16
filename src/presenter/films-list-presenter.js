@@ -258,7 +258,11 @@ export default class FilmsListPresenter {
   }
 
   #renderFilmsSection = () => {
-    this.#renderSort();
+    const filmCount = this.films.length;
+
+    if (filmCount > 0) {
+      this.#renderSort();
+    }
     render(this.#mainContainer, this.#filmsComponent, RenderPosition.BEFOREEND);
     this.#renderFilmsListSection();
     this.#renderFilmsListContainer();

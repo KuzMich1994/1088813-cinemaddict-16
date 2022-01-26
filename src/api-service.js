@@ -65,10 +65,10 @@ export default class ApiService {
     },
     actor,
     ageRating,
-    comments,
+    commentsIds,
   }) => ({
     id,
-    comments,
+    comments: commentsIds,
     'film_info': {
       title: name,
       'alternative_title': originalName,

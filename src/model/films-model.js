@@ -50,7 +50,7 @@ export default class FilmsModel extends AbstractObservable {
 
   #adaptToClient = ({
     id,
-    comments,
+    comments: commentsIds,
     'film_info': {
       title: name,
       'alternative_title': originalName,
@@ -95,6 +95,6 @@ export default class FilmsModel extends AbstractObservable {
     },
     actor,
     ageRating,
-    comments,
+    commentsIds,
   })
 }

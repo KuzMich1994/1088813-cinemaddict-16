@@ -43,13 +43,15 @@ export default class FiltersView extends ComponentView {
 
   setFilterTypeChangeHandler = (callback) => {
     this._callback.filterTypeChange = callback;
-    this.element.addEventListener('click', this.#filterTypeChangeHandler);
+    this.element.querySelectorAll('.main-navigation__item')
+      .forEach((mainNavigationItem) => {
+        mainNavigationItem.addEventListener('click', this.#filterTypeChangeHandler);
+      });
+    // this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
 
   #filterTypeChangeHandler = (e) => {
-    let target = e.target;
-
-    target = target.closest('.main-navigation__item');
+    const target = e.target;
 
     e.preventDefault();
 

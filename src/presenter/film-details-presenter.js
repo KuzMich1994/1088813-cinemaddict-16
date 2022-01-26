@@ -123,7 +123,7 @@ export default class FilmDetailsPresenter {
 
   #renderComments = () => {
     const comments = this.#commentsModel.comments;
-    this.#film.comments = comments.map((comment) => comment.id);
+    this.#film.commentsIds = comments.map((comment) => comment.id);
 
     this.#filmDetailsNewCommentComponent = new FilmDetailsNewCommentView(comments);
     this.#filmDetailsCommentsCounter = new CommentsCounterView(comments);
