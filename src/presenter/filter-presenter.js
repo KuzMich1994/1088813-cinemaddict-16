@@ -84,7 +84,6 @@ export default class FilterPresenter {
   }
 
   #handleFilterTypeChange = (filterType) => {
-
     this.#removeStatistics();
     this.#filmsPresenter.reInit();
 
