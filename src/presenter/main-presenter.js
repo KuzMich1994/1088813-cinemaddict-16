@@ -1,6 +1,6 @@
 import FilmsListPresenter from './films-list-presenter';
 import FilterPresenter from './filter-presenter';
-import MainNavigationView from '../view/navigation-view';
+import NavigationView from '../view/navigation-view';
 import {remove, render, RenderPosition} from '../utils/render';
 import StatisticsView from '../view/statistics-view';
 
@@ -11,7 +11,7 @@ export default class MainPresenter {
   #filtersModel = null;
   #commentsModel = null;
 
-  #navigationComponent = new MainNavigationView();
+  #navigationComponent = new NavigationView();
   #statisticsComponent = null;
 
   #mainContainer = document.querySelector('.main');

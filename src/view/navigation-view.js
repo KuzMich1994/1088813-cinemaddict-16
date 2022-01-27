@@ -6,7 +6,7 @@ const createMainNavigationTemplate = () => (
     </nav>`
 );
 
-export default class MainNavigationView extends ComponentView {
+export default class NavigationView extends ComponentView {
   #filters = null;
   #currentFilter = null;
   constructor(filters, currentFilterType) {

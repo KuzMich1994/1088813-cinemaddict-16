@@ -85,3 +85,5 @@ export const getTopGenre = (chartData) => {
 
   return keys[topGenreIndex];
 };
+
+export const isEscapeKey = (e) => (e.key === 'Escape' || e.key === 'Esc');

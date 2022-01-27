@@ -1,4 +1,4 @@
-import ShowMoreView from '../view/show-more-button-view';
+import ShowMoreButtonView from '../view/show-more-button-view';
 import {FILMS_COUNTER_PER_STEP, FilterType, SortType, UpdateType, UserAction} from '../const';
 import { remove, render, RenderPosition } from '../utils/render';
 import SortView from '../view/sort-view';
@@ -13,6 +13,7 @@ import FilmDetailsPresenter from './film-details-presenter';
 import LoadingView from '../view/loading-view';
 import FilmsCounterView from '../view/films-counter-view';
 import HeaderProfileView from '../view/header-profile-view';
+import {isEscapeKey} from '../utils/common';
 
 export default class FilmsListPresenter {
   #filmsComponent = new FilmsView();
@@ -218,7 +219,7 @@ export default class FilmsListPresenter {
   }
 
   #renderShowMoreButton = () => {
-    this.#showMoreButtonComponent = new ShowMoreView();
+    this.#showMoreButtonComponent = new ShowMoreButtonView();
     render(this.#filmsListContainerComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
 
     this.#showMoreButtonComponent.setAddCardsClickHandler(this.#handleShowMoreButtonClick);
@@ -290,7 +291,7 @@ export default class FilmsListPresenter {
   }
 
   #escKeyDownHandler = (e) => {
-    if ((e.key === 'Escape' || e.key === 'Esc') && this.#state.isOpen) {
+    if (isEscapeKey(e) && this.#state.isOpen) {
       this.#state.isOpen = false;
       this.#filmDetailsPresenter.destroy();
       document.body.classList.remove('hide-overflow');

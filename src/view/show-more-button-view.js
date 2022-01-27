@@ -4,7 +4,7 @@ const createShowMoreButtonTemplate = () => (
   '<button class="films-list__show-more">Show more</button>'
 );
 
-export default class ShowMoreView extends ComponentView {
+export default class ShowMoreButtonView extends ComponentView {
   get template() {
     return createShowMoreButtonTemplate();
   }

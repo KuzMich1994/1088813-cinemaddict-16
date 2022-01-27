@@ -7,6 +7,7 @@ import {State, UpdateType, UserAction} from '../const';
 import CommentsCounterView from '../view/film-details/comments-counter-view';
 import FilmDetailsCommentsLoadingView from '../view/film-details/film-details-comments-loading-view';
 import FilmDetailsCommentsTitleView from '../view/film-details/film-details-comments-title-view';
+import {isEscapeKey} from '../utils/common';
 
 export default class FilmDetailsPresenter {
   #filmDetailsComponent = null;
@@ -195,7 +196,7 @@ export default class FilmDetailsPresenter {
   }
 
   #escKeyDownHandler = (e) => {
-    if (e.key === 'Escape' || e.key === 'Esc') {
+    if (isEscapeKey(e)) {
       this.#state.isOpen = false;
       remove(this.#filmDetailsComponent);
       document.body.classList.remove('hide-overflow');
